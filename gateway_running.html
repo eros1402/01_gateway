@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Sensor Gateway</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style type="text/css">
+    body {
+      background-color: #cde; margin: 0;
+      padding: 0; font: 14px Helvetica, Arial, sans-serif;
+    }
+    div.content {
+      width: 1000px; margin: 2em auto; padding: 20px 50px;
+      background-color: #fff; border-radius: 1em;
+    }
+    #textlog {
+      border: 2px solid #fec; border-radius: 1em;
+      height: 15em; overflow: scroll; padding: 0.5em 1em;
+    }
+    a:link, a:visited { color: #69c; text-decoration: none; }
+    @media (max-width: 900px) {
+      body { background-color: #fff; }
+      div.content {
+        width: auto; margin: 0 auto; border-radius: 0;
+        padding: 1em;
+      }
+    }
+	</style>
+	
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script language="javascript" type="text/javascript">
+  jQuery(function() {
+    $(document).on('ready', function() {
+      $.ajax({
+        url: '/gw_general_info',
+        method: 'GET',
+        dataType: 'json',       
+        success: function(json) {
+         $('#gw_port').html(json.gw_port); 
+		 $('#gw_db').html(json.gw_db);
+		 $('#gw_db_name').html(json.gw_db_name);
+		 $('#gw_high_temp').html(json.gw_high_temp);
+		 $('#gw_low_temp').html(json.gw_low_temp);
+		 $('#gw_ss_num').html(json.gw_ss_num);
+		 $('#gw_packet_num').html(json.gw_packet_num);
+        }
+      });
+    });
+  });	
+</script>
+
+</head>
+
+<body>
+  <div class="content">
+    <h1>THE SENSOR GATEWAY IS RUNNING...</h1>
+
+    <p>
+	<h2>Gateway Configuration Info :</h2>      		
+    </p>
+
+    <p>
+      Gateway Port Number: <b><span id="gw_port"></b></span>
+    </p>
+    <p>
+      Gateway IP Address: 127.0.0.1<b><span id="gw_ip"></b></span>
+    </p>
+	
+	<p>
+      Gateway Database: <b><span id="gw_db"></b></span>  -  Table Name: <b><span id="gw_db_name"></b></span>
+    </p>
+	
+	<p>
+      Room high temperature set: <b><span id="gw_high_temp"></b></span> [oC]
+    </p>
+
+	<p>
+      Room high temperature set: <b><span id="gw_low_temp"></b></span> [oC]
+    </p>
+
+	<p>
+	<h2>Statistics Info :</h2>      		
+    </p>
+	
+	<p>
+      Number of connected sensors: <b><span id="gw_ss_num"></b></span>
+    </p>
+	
+	<p>
+      Number of sensor received packets: <b><span id="gw_packet_num"></b></span>
+    </p>
+	
+	<p>
+	<h2>Gateway Log :</h2>      		
+    </p>
+		
+    <div id="textlog"> 
+    </div>
+	
+	<p>
+	<h2>Temp output:</h2>   <b><span id="temp"></b></span>    		
+    </p>
+
+    <p>      
+      <button id="check_db_bt">Read SQL Database</button>
+    </p>
+  </div>
+</body>
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script language="javascript" type="text/javascript">
+		
+	var myTimer_1s = setInterval(function () {timer_ev()}, 500);
+	
+	function timer_ev() {
+	    /*
+		var div = document.createElement("div");  
+		var d = new Date();		
+		var t3 = document.createTextNode(d.toLocaleTimeString());
+		div.appendChild(t3);		
+		document.getElementById("textlog").appendChild(div);
+		*/	
+		jQuery(
+			function() {
+			$.ajax({
+				url: '/gw_general_info',
+				method: 'POST',				
+				data: "Get_log",
+				dataType: 'json',
+				success: function(json) {
+					if(json.log_line != '') {
+						$('#textlog').append('<pre>' + json.log_line + '</pre>');						
+					}
+					if(json.gw_ss_num != '') {
+						$('#gw_ss_num').html(json.gw_ss_num);	
+					}
+					if(json.gw_packet_num != '') {
+						$('#gw_packet_num').html(json.gw_packet_num);	
+					}
+				}
+			});
+		 }	
+		);
+		 
+	  	
+	}		
+</script>
+
+</html>
