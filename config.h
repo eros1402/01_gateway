@@ -8,19 +8,19 @@
 /*------------------------------------------------------------------------------
 		definitions (defines, typedefs, ...)
 ------------------------------------------------------------------------------*/
-// #ifdef DEBUG
-	// #define DB_SERVER_NAME "localhost"
-	// #define USER_NAME "root"
-	// #define PASSWORD "7777"
-	// #define DB_NAME "mylocaldb"
-	// #define TABLE_NAME "PhamHoangChi"
-// #else
+#ifdef DEBUG
+	#define DB_SERVER_NAME "localhost"
+	#define USER_NAME "root"
+	#define PASSWORD "7777"
+	#define DB_NAME "mylocaldb"
+	#define TABLE_NAME "PhamHoangChi"
+#else
 	#define DB_SERVER_NAME "studev.groept.be"
 	#define USER_NAME "a13_syssoft"
 	#define PASSWORD "a13_syssoft"
 	#define DB_NAME "a13_syssoft"
 	#define TABLE_NAME "PhamHoangChi"
-// #endif
+#endif
 
 #define QUEUE_SIZE 5
 #define NUM_OF_WRITER 1
